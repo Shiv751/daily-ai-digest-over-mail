@@ -13,11 +13,14 @@ NEWS_API_KEY    = os.environ["NEWS_API_KEY"]        # From newsapi.org
 # ──────────────────────────────────────────────────────────────────────────────
 
 def fetch_ai_news():
+    today = datetime.now().strftime("%Y-%m-%d")  # e.g. 2026-02-28
     url = "https://newsapi.org/v2/everything"
     params = {
-        "q": "artificial intelligence OR AI technology",
+        "q": '("artificial intelligence" OR "machine learning" OR "large language model" OR "generative AI" OR "OpenAI" OR "Anthropic" OR "Gemini" OR "ChatGPT")',
         "language": "en",
         "sortBy": "publishedAt",
+        "from": today,        # Only today's articles
+        "to": today,
         "pageSize": 8,
         "apiKey": NEWS_API_KEY,
     }
