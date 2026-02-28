@@ -1,0 +1,30 @@
+name: Daily AI News Digest
+
+on:
+  schedule:
+    - cron: "30 4 * * *"   # 4:30 AM UTC = 10:00 AM IST every day
+  workflow_dispatch:         # Allows manual trigger from GitHub UI
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Send AI digest email
+        env:
+          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          SENDER_EMAIL:    ${{ secrets.SENDER_EMAIL }}
+          SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
+          NEWS_API_KEY:    ${{ secrets.NEWS_API_KEY }}
+        run: python send_digest.py
